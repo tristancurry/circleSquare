@@ -1,4 +1,4 @@
-int sides = 1000;
+int sides = 25;
 int r = 200;
 
 void setup() {
