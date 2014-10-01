@@ -4,42 +4,59 @@ float perim;
 color col;
 PImage picker;
 ColPicker pickNChoose;
+Slider sideSlider;
 
 
 void setup() {
   size(540, 960);
   smooth();
-
+  cursor(HAND);
   picker = loadImage("spectrum.jpg");
   pickNChoose = new ColPicker(width/2, 0, 0, 0, picker);
+  sideSlider = new Slider(width/2, 0, 10, 3, 100, 4);
 }
 
 void draw() {
   background(50, 40, 100);
-
-  sides = 5; //this will become subject to slider value
+  sides = sideSlider.value; //this will become subject to slider value
   r = int(round(0.45*width));
 
 
 
+
   //update and draw slider
+  sideSlider.hover(mouseX, mouseY);
+  if (sideSlider.dragging) sideSlider.drag();
   rectMode(CENTER);
   imageMode(CENTER);
-  noFill();
-  stroke(255);
-  strokeWeight(2);
-  pushMatrix();
-  translate(width/2, 0.3*r);
-  rect(0, 0, 0.85*width, 0.2*r);
-  popMatrix();
+
+  sideSlider.posY = int(round(0.3*r));
+  sideSlider.sWidth = int(round(0.85*width));
+  sideSlider.display();
+
 
   //draw colour picker
   pushMatrix();
+  stroke(255);
+  strokeWeight(2);
+  noFill();
   pickNChoose.posX = 0.5*width;
   pickNChoose.posY = 0.9*r;
   pickNChoose.pWidth = 0.85*width;
   pickNChoose.pHeight = 0.6*r;
   pickNChoose.display();
+  if (pickNChoose.contains(mouseX, mouseY)) {
+    noCursor();
+    pickNChoose.selX = mouseX;
+    pickNChoose.selY = mouseY;
+    pickNChoose.drawSelector();
+    if (pickNChoose.dragging) {
+      loadPixels();
+      col = pixels[mouseY*width + mouseX];
+    }
+  } else {
+    cursor(HAND);
+  }
   translate(pickNChoose.posX, pickNChoose.posY);
   rect(0, 0, pickNChoose.pWidth + 2, pickNChoose.pHeight+ 2);
   popMatrix();
@@ -59,17 +76,7 @@ void draw() {
   translate(-0.01*r, -0.01*r);
   drawText();
   popMatrix();
-
-  if (mousePressed) {
-    if (pickNChoose.contains(mouseX, mouseY)) {
-      pickNChoose.selX = mouseX;
-      pickNChoose.selY = mouseY;
-      pickNChoose.drawSelector();
-      loadPixels();
-      col = pixels[mouseY*width + mouseX];
-    }
-  }
-}
+} 
 
 void drawText() {
   textSize(0.15*r);
@@ -84,7 +91,7 @@ void drawPolygon() {
   perim = sides*2*r*sin(a/2);  //using trigonometry to determine side length
 
 
-//Find the coordinates of the vertices of the polygon
+  //Find the coordinates of the vertices of the polygon
   for (int i = 0; i < sides; i++) {
     if (i<= sides/2) {
       vertices[i][0] = r*cos(i*a);
@@ -94,7 +101,7 @@ void drawPolygon() {
       vertices[i][1] = -1*vertices[sides - i][1];
     }
   }
-  
+
   //draw the polygon
   pushMatrix();
   rectMode(CENTER);
@@ -108,5 +115,16 @@ void drawPolygon() {
     vertex(vertices[i][0], vertices[i][1]);
   }
   endShape(CLOSE);
+}
+
+void mousePressed() {
+  sideSlider.clicked(mouseX, mouseY);
+
+  if (pickNChoose.contains(mouseX, mouseY)) pickNChoose.dragging = true;
+}
+
+void mouseReleased() {
+  sideSlider.dragging = false;
+  pickNChoose.dragging = false;
 }
 

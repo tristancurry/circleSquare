@@ -10,6 +10,8 @@ class ColPicker {
   
   float selX;
   float selY;
+  
+  boolean dragging;
 
 
   ColPicker(float posX_, float posY_, float pWidth_, float pHeight_, PImage pickerImage_) {
@@ -19,7 +21,7 @@ class ColPicker {
     pHeight = pHeight_;
 
     pickerImage = pickerImage_;
-    
+    dragging = false;
   }
 
   void display() {
