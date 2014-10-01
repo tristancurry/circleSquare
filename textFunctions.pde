@@ -97,7 +97,7 @@ void drawPolyText() {
   text(sides + " sides", 0, -0.18*r);
   textSize(0.08*r);
   text(r + " units from centre to corner", 0, 0);
-  text(round(perim) + " units in perimeter", 0, 0.13*r);
+  text(nf(floor(100*perim)/100.0,4,2) + " units in perimeter", 0, 0.13*r);
 }
 
 
