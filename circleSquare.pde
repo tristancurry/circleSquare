@@ -9,17 +9,24 @@ Slider sideSlider;
 
 void setup() {
   size(540, 960);
+    if (frame != null) {
+    frame.setResizable(true);
+  }
   smooth();
   cursor(HAND);
   picker = loadImage("spectrum.jpg");
   pickNChoose = new ColPicker(width/2, 0, 0, 0, picker);
-  sideSlider = new Slider(width/2, 0, 10, 3, 100, 4,1.6);
+  sideSlider = new Slider(width/2, 0, 10, 3, 100, 4, 2);
+  rectMode(CENTER);
+  imageMode(CENTER);
 }
+
+
 
 void draw() {
   background(50, 40, 100);
   sides = sideSlider.value; //this will become subject to slider value
-  r = int(round(0.45*width));
+  r = int(round(0.24*height));
 
 
 
@@ -27,24 +34,20 @@ void draw() {
   //update and draw slider
   sideSlider.hover(mouseX, mouseY);
   if (sideSlider.dragging) sideSlider.drag();
-  rectMode(CENTER);
-  imageMode(CENTER);
-
+  sideSlider.posX = width/2;
   sideSlider.posY = int(round(0.3*r));
   sideSlider.sWidth = int(round(0.85*width));
   sideSlider.display();
 
-
-  //draw colour picker
-  pushMatrix();
-  stroke(255);
-  strokeWeight(2);
-  noFill();
-  pickNChoose.posX = 0.5*width;
+  //update and draw colour picker
+  pickNChoose.posX = 0.5*width;  //the size and shape have to be set every frame if the screen is resizeable. Otherwise it would be done once in setup.
   pickNChoose.posY = 0.9*r;
   pickNChoose.pWidth = 0.85*width;
-  pickNChoose.pHeight = 0.6*r;
+  pickNChoose.pHeight = 0.6*r;          
   pickNChoose.display();
+
+  //adjust cursor if picking a colour
+
   if (pickNChoose.contains(mouseX, mouseY)) {
     noCursor();
     pickNChoose.selX = mouseX;
@@ -57,13 +60,18 @@ void draw() {
   } else {
     cursor(HAND);
   }
+
+  //draw a border around the colour picker
+  pushMatrix();
+  stroke(255);
+  strokeWeight(2);
+  noFill();
   translate(pickNChoose.posX, pickNChoose.posY);
   rect(0, 0, pickNChoose.pWidth + 2, pickNChoose.pHeight+ 2);
   popMatrix();
 
 
   //draw polygon
-
   drawPolygon();
 
   textAlign(CENTER, CENTER);
@@ -105,7 +113,7 @@ void drawPolygon() {
   //draw the polygon
   pushMatrix();
   rectMode(CENTER);
-  translate(width/2, height - width/2);
+  translate(width/2, height - 1.29*r);
   fill(col);
   stroke(255, 255, 255);
   strokeWeight(2);
@@ -119,7 +127,6 @@ void drawPolygon() {
 
 void mousePressed() {
   sideSlider.clicked(mouseX, mouseY);
-
   if (pickNChoose.contains(mouseX, mouseY)) pickNChoose.dragging = true;
 }
 
