@@ -13,7 +13,7 @@ void setup() {
   cursor(HAND);
   picker = loadImage("spectrum.jpg");
   pickNChoose = new ColPicker(width/2, 0, 0, 0, picker);
-  sideSlider = new Slider(width/2, 0, 10, 3, 100, 4);
+  sideSlider = new Slider(width/2, 0, 10, 3, 100, 4,1.6);
 }
 
 void draw() {
