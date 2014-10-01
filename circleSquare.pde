@@ -1,3 +1,30 @@
+//circleSquare                                                                              //
+//A toy for exploring polygons of fixed long radius                                         //
+//based on Conrad Wolfram's applet seen in https://www.youtube.com/watch?v=60OVlfAUPJg      //
+//(circleSquare.pde)                                                                        //
+//////////////////////////////////////////////////////////////////////////////////////////////
+//by Tristan Miller, 2014                                                                   //
+//Please send any feedback and suggestions to tristan.miller@asms.sa.edu.au                 //
+//Full source repository is at https://github.com/tristanmiller/circleSquare                //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
+//This file is part of circleSquare.                                                        //
+//                                                                                          //
+//  circleSquare is free software: you can redistribute it and/or modify                    //
+//  it under the terms of the GNU General Public License as published by                    //
+//  the Free Software Foundation, either version 3 of the License, or                       //
+//  (at your option) any later version.                                                     //
+//                                                                                          //
+//  circleSquare is distributed in the hope that it will be useful,                         //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of                          //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                           //
+//  GNU General Public License for more details.                                            //
+//                                                                                          //
+// You should have received a copy of the GNU General Public License                        //
+//  along with circleSquare.  If not, see <http://www.gnu.org/licenses/>.                   //
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
 int sides;
 int r;
 float perim;
@@ -23,12 +50,13 @@ int clickTimer = 0;
 ColPicker yourPicker;
 Slider sideSlider;
 
-
+//////Setup: runs once at program start//////
 void setup() {
+  
   size(540, 960);
   
   if (frame != null) {
-    frame.setResizable(true);  //need for resizeable window
+    frame.setResizable(true);  //needed for resizeable window
   }
   
   smooth();
@@ -52,7 +80,7 @@ void setup() {
 }
 
 
-
+//////Draw: loops continuously unless told not to//////
 void draw() {
   background(50, 40, 100);
   sides = sideSlider.value; //attach number of sides to slider value
@@ -78,8 +106,6 @@ void draw() {
     }
   }
 
-
-
   //update and draw slider
   sideSlider.hover(mouseX, mouseY);
   if (sideSlider.dragging) sideSlider.drag();
@@ -99,7 +125,6 @@ void draw() {
     col = pixels[mouseY*width + mouseX];
   }
 
-
   //draw a border around the colour picker
   pushMatrix();
   stroke(255);
@@ -108,7 +133,6 @@ void draw() {
   translate(yourPicker.posX, yourPicker.posY);
   rect(0, 0, yourPicker.pWidth + 2, yourPicker.pHeight+ 2);
   popMatrix();
-
 
   //draw polygon
   if (rotDragging) updatePolyAngle();
@@ -127,7 +151,7 @@ void draw() {
 
 
 
-
+////////////////////////
 void drawPolygon() {
   float[][] vertices = new float[sides][2];
   float a = TWO_PI/sides;      //keeping things in radians
@@ -164,7 +188,7 @@ void drawPolygon() {
 }
 
 
-
+////////////////////////
 void updatePolyAngle() {
   float dAngle = mouseAngle - tempAngle;
   polyAngle = polyAngle + dAngle;

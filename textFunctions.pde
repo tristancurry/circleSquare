@@ -1,12 +1,42 @@
-void drawPolyText() {
-  textSize(0.20*r);
-  text(sides + " sides", 0, -0.18*r);
-  textSize(0.08*r);
-  text(r + " units from centre to corner", 0, 0);
-  text(round(perim) + " units in perimeter", 0, 0.13*r);
+//circleSquare                                                                              //
+//A toy for exploring polygons of fixed long radius                                         //
+//based on Conrad Wolfram's applet seen in https://www.youtube.com/watch?v=60OVlfAUPJg      //
+//(textFunctions.pde)                                                                       //
+//////////////////////////////////////////////////////////////////////////////////////////////
+//by Tristan Miller, 2014                                                                   //
+//Please send any feedback and suggestions to tristan.miller@asms.sa.edu.au                 //
+//Full source repository is at https://github.com/tristanmiller/circleSquare                //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
+//This file is part of circleSquare.                                                        //
+//                                                                                          //
+//  circleSquare is free software: you can redistribute it and/or modify                    //
+//  it under the terms of the GNU General Public License as published by                    //
+//  the Free Software Foundation, either version 3 of the License, or                       //
+//  (at your option) any later version.                                                     //
+//                                                                                          //
+//  circleSquare is distributed in the hope that it will be useful,                         //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of                          //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                           //
+//  GNU General Public License for more details.                                            //
+//                                                                                          //
+// You should have received a copy of the GNU General Public License                        //
+//  along with circleSquare.  If not, see <http://www.gnu.org/licenses/>.                   //
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////
+void drawCreditText() {
+  pushMatrix();
+  translate(width-0.04*r, 0);
+  translate(0, height/2);
+  rotate(HALF_PI);
+  textSize(0.09*r);
+  fill(165, 255, 0, abs(150*sin(radians(frameCount/50))));
+  text("Tristan Miller 2014. Suggestions, comments to tristan.miller@asms.sa.edu.au", 0, 0);
+  popMatrix();
 }
 
-
+////////////////////////
 void drawHelpText() {
   if (sliderHelpCounter >= helpCounterThreshold) {
     pushMatrix();
@@ -45,6 +75,7 @@ void drawHelpText() {
   }
 }
 
+////////////////////////
 void drawLabelText() {
   pushMatrix();
   translate(width/2, polyCentre);
@@ -60,14 +91,14 @@ void drawLabelText() {
   popMatrix();
 }
 
-void drawCreditText() {
-  pushMatrix();
-  translate(width-0.04*r, 0);
-  translate(0, height/2);
-  rotate(HALF_PI);
-  textSize(0.09*r);
-  fill(165, 255, 0, abs(150*sin(radians(frameCount/50))));
-  text("Tristan Miller 2014. Suggestions, comments to tristan.miller@asms.sa.edu.au", 0, 0);
-  popMatrix();
+////////////////////////
+void drawPolyText() {
+  textSize(0.20*r);
+  text(sides + " sides", 0, -0.18*r);
+  textSize(0.08*r);
+  text(r + " units from centre to corner", 0, 0);
+  text(round(perim) + " units in perimeter", 0, 0.13*r);
 }
+
+
 
