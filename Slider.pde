@@ -54,9 +54,6 @@ class Slider {
     if (mouseOver) fill(255);
     ellipse(ballPosX, ballPosY, ballDiameter, ballDiameter);
     drawArrow();
-    println("xmin, xmax " + xmin + ", " + xmax);
-    println("ball X = " + ballPosX);
-    println("slider dragging = " + dragging);
   }
 
   void clicked(int mx, int my) {

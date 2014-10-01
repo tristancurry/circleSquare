@@ -1,20 +1,31 @@
 int sides;
 int r;
 float perim;
+float polyCentre;
+float polyAngle;
 color col;
 PImage picker;
+boolean rotCursor;
+PImage rotWhite;
+PImage rotBlack;
+
 ColPicker pickNChoose;
 Slider sideSlider;
 
 
 void setup() {
   size(540, 960);
-    if (frame != null) {
+  if (frame != null) {
     frame.setResizable(true);
   }
   smooth();
+  rotCursor = false;
   cursor(HAND);
   picker = loadImage("spectrum.jpg");
+  rotWhite = loadImage("rotWhite.png");
+  rotBlack = loadImage("rotBlack.png");
+
+
   pickNChoose = new ColPicker(width/2, 0, 0, 0, picker);
   sideSlider = new Slider(width/2, 0, 10, 3, 100, 4, 2);
   rectMode(CENTER);
@@ -27,14 +38,30 @@ void draw() {
   background(50, 40, 100);
   sides = sideSlider.value; //this will become subject to slider value
   r = int(round(0.24*height));
+  polyCentre = height - 1.3*r;
 
+
+//change cursor depending on mouse position
+    if (pickNChoose.contains(mouseX, mouseY)) {
+    noCursor();
+    pickNChoose.selX = mouseX;
+    pickNChoose.selY = mouseY;
+    pickNChoose.selector = true;
+  } else if (sq(mouseX - width/2) + sq(mouseY - (polyCentre))< sq(1.2*r)) {
+    noCursor();
+    rotCursor = true;
+  } else {
+    pickNChoose.selector = false;
+    rotCursor = false;
+    cursor(HAND);
+  }
 
 
 
   //update and draw slider
   sideSlider.hover(mouseX, mouseY);
   if (sideSlider.dragging) sideSlider.drag();
-  sideSlider.posX = width/2;
+  sideSlider.posX = width/2;  
   sideSlider.posY = int(round(0.3*r));
   sideSlider.sWidth = int(round(0.85*width));
   sideSlider.display();
@@ -45,21 +72,11 @@ void draw() {
   pickNChoose.pWidth = 0.85*width;
   pickNChoose.pHeight = 0.6*r;          
   pickNChoose.display();
-
-  //adjust cursor if picking a colour
-
-  if (pickNChoose.contains(mouseX, mouseY)) {
-    noCursor();
-    pickNChoose.selX = mouseX;
-    pickNChoose.selY = mouseY;
-    pickNChoose.drawSelector();
-    if (pickNChoose.dragging) {
-      loadPixels();
-      col = pixels[mouseY*width + mouseX];
-    }
-  } else {
-    cursor(HAND);
+  if (pickNChoose.dragging && pickNChoose.contains(mouseX, mouseY)) {
+    loadPixels();
+    col = pixels[mouseY*width + mouseX];
   }
+
 
   //draw a border around the colour picker
   pushMatrix();
@@ -74,6 +91,12 @@ void draw() {
   //draw polygon
   drawPolygon();
 
+  //draw the special rotation cursor if need be
+  if (rotCursor) drawRotCursor();
+
+  //overlay text labels
+  pushMatrix();
+  translate(width/2, polyCentre);
   textAlign(CENTER, CENTER);
   fill(0.4*(255-brightness(col)));
   translate(0.01*r, 0.01*r);
@@ -85,6 +108,9 @@ void draw() {
   drawText();
   popMatrix();
 } 
+
+
+
 
 void drawText() {
   textSize(0.15*r);
@@ -110,10 +136,11 @@ void drawPolygon() {
     }
   }
 
-  //draw the polygon
+  //draw the polygon itself
   pushMatrix();
   rectMode(CENTER);
-  translate(width/2, height - 1.29*r);
+  translate(width/2, polyCentre);
+  rotate(polyAngle);
   fill(col);
   stroke(255, 255, 255);
   strokeWeight(2);
@@ -123,6 +150,8 @@ void drawPolygon() {
     vertex(vertices[i][0], vertices[i][1]);
   }
   endShape(CLOSE);
+
+  popMatrix();
 }
 
 void mousePressed() {
@@ -133,5 +162,36 @@ void mousePressed() {
 void mouseReleased() {
   sideSlider.dragging = false;
   pickNChoose.dragging = false;
+}
+
+
+void drawRotCursor() {
+  int cursorSize = 53;
+  float dx = mouseX - width/2;
+  float dy = mouseY - polyCentre;
+  float scale = 1.0*cursorSize/rotWhite.width;
+  float angle = HALF_PI + atan(dy/dx);
+  if (dx < 0) {
+    angle = angle + PI;
+  }
+  //rotWhite.resize(cursorSize, int(round(scale*rotWhite.height)));
+  // rotBlack.resize(cursorSize, rotWhite.height);
+
+  pushMatrix();
+  translate(mouseX, mouseY);
+  translate(2, 2);
+  scale(scale);
+  rotate(angle);
+  image(rotBlack, 0, 0);
+  popMatrix();
+  pushMatrix();
+  translate(mouseX, mouseY);
+  scale(scale);
+  rotate(angle);
+  image(rotWhite, 0, 0);
+  popMatrix();
+}
+
+void updatePolyAngle() {
 }
 

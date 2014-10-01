@@ -11,6 +11,7 @@ class ColPicker {
   float selX;
   float selY;
   
+  boolean selector;
   boolean dragging;
 
 
@@ -21,25 +22,27 @@ class ColPicker {
     pHeight = pHeight_;
 
     pickerImage = pickerImage_;
+    selector = false;
     dragging = false;
   }
 
   void display() {
     imageMode(CENTER);
     image(pickerImage, posX, posY, pWidth, pHeight);
+    if(selector) drawSelector();
   }
   
   void drawSelector(){
    ellipseMode(CENTER);
-   strokeWeight(2);
+   strokeWeight(3);
    noFill();
    pushMatrix();
    translate(selX + 1,selY + 1);
    stroke(50);
-   ellipse(0,0,10,10);
+   ellipse(0,0,0.12*pHeight,0.12*pHeight);
    translate(-1,-1);
    stroke(255);
-   ellipse(0,0,10,10);
+   ellipse(0,0,0.12*pHeight,0.12*pHeight);
    popMatrix();
   }
   
