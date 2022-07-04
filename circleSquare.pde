@@ -55,9 +55,9 @@ void setup() {
   
   size(540, 960);
   
-  if (frame != null) {
-    frame.setResizable(true);  //needed for resizeable window
-  }
+  //if (frame != null) {
+  //  frame.setResizable(true);  //needed for resizeable window
+  //}
   
   smooth();
 
@@ -193,4 +193,3 @@ void updatePolyAngle() {
   float dAngle = mouseAngle - tempAngle;
   polyAngle = polyAngle + dAngle;
 }
-
